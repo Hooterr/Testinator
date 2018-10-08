@@ -5,6 +5,8 @@ using Testinator.Core;
 using System.Timers;
 using System.Threading;
 
+using static Testinator.Server.Core.DI;
+
 namespace Testinator.Server.Core
 {
     /// <summary>
@@ -89,7 +91,7 @@ namespace Testinator.Server.Core
             foreach (var client in ClientsInTest)
             {
                 // Send start command with args
-                IoCServer.Network.Send(client, TestStartPackage);
+                Network.Send(client, TestStartPackage);
 
                 // Reset the client for new test
                 client.ResetForNewTest(CurrentTest.Questions.Count);
@@ -119,7 +121,7 @@ namespace Testinator.Server.Core
             foreach (var client in ClientsInTest)
             {
                 client.CanStartTest = true;
-                IoCServer.Network.Send(client, stopTestPackage);
+                Network.Send(client, stopTestPackage);
             }
 
             IsTestInProgress = false;
@@ -178,9 +180,9 @@ namespace Testinator.Server.Core
             {
                 ClientsInTest.Add(client);
 
-                IoCServer.Network.Send(client, packageWithTest);
+                Network.Send(client, packageWithTest);
 
-                IoCServer.Network.Send(client, packageWithArgs);
+                Network.Send(client, packageWithArgs);
 
                 client.ResetForNewTest(CurrentTest.Questions.Count);
             }
@@ -298,7 +300,7 @@ namespace Testinator.Server.Core
                             CancelText = "No, wait for them",
                         };
 
-                        IoCServer.UI.ShowMessage(vm);
+                        UI.ShowMessage(vm);
 
                         // Stop before time
                         if (vm.UserResponse)
@@ -324,8 +326,8 @@ namespace Testinator.Server.Core
             // Initialize timer
             mTestTimer.Elapsed += HandleTimer;
 
-            IoCServer.Network.OnClientDataUpdated += ServerNetwork_OnClientDataUpdated;
-            IoCServer.Network.OnDataReceived += OnDataReceived;
+            Network.OnClientDataUpdated += ServerNetwork_OnClientDataUpdated;
+            Network.OnDataReceived += OnDataReceived;
         }
 
         #endregion
@@ -393,7 +395,7 @@ namespace Testinator.Server.Core
         private void FinishTest()
         {
             IsTestInProgress = false;
-            IoCServer.Application.GoToPage(ApplicationPage.BeginTestResults);
+            Application.GoToPage(ApplicationPage.BeginTestResults);
 
             // Clear guid
             CurrentSessionIdentifier = default(Guid);
@@ -465,7 +467,7 @@ namespace Testinator.Server.Core
         {
             // Send it to all clients
             foreach (var client in ClientsInTest)
-                IoCServer.Network.Send(client, data);
+                Network.Send(client, data);
         }
 
         /// <summary>

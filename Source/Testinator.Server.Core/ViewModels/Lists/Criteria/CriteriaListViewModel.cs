@@ -1,8 +1,11 @@
-﻿using System;
+﻿using Dna;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using Testinator.Core;
+
+using static Testinator.Server.Core.DI;
 
 namespace Testinator.Server.Core
 {
@@ -139,7 +142,7 @@ namespace Testinator.Server.Core
             catch (Exception ex)
             {
                 // If an error occured, show info to the user
-                IoCServer.UI.ShowMessage(new MessageBoxDialogViewModel
+                UI.ShowMessage(new MessageBoxDialogViewModel
                 {
                     Title = "Błąd wczytywania",
                     Message = "Nie udało się wczytać dostępnych kryteriów." +
@@ -147,7 +150,7 @@ namespace Testinator.Server.Core
                     OkText = "Ok"
                 });
 
-                IoCServer.Logger.Log("Unable to read criteria from local folder, error message: " + ex.Message);
+                Logger.LogDebugSource("Unable to read criteria from local folder, error message: " + ex.Message);
             }
 
             // Rewrite list to the observable collection

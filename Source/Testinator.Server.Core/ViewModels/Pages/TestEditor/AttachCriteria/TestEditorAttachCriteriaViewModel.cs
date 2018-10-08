@@ -2,6 +2,8 @@
 using System.Windows.Input;
 using Testinator.Core;
 
+using static Testinator.Server.Core.DI;
+
 namespace Testinator.Server.Core
 {
     /// <summary>
@@ -72,7 +74,7 @@ namespace Testinator.Server.Core
         /// </summary>
         private void GoPreviousPage()
         {
-            IoCServer.TestEditor.GoPreviousPage();
+            DI.TestEditor.GoPreviousPage();
         }
 
         /// <summary>
@@ -114,11 +116,11 @@ namespace Testinator.Server.Core
             }
             try
             {
-                IoCServer.TestEditor.Builder.AddGrading(PointsGrading);
+                DI.TestEditor.Builder.AddGrading(PointsGrading);
             }
             catch (Exception ex)
             {
-                IoCServer.UI.ShowMessage(new MessageBoxDialogViewModel()
+                UI.ShowMessage(new MessageBoxDialogViewModel()
                 {
                     Title = "Test editor",
                     Message = $"Nieznany bład. {ex.Message}",
@@ -127,7 +129,7 @@ namespace Testinator.Server.Core
                 return;
             }
 
-            IoCServer.TestEditor.GoNextPhase();
+            DI.TestEditor.GoNextPhase();
         }
 
         /// <summary>
@@ -136,7 +138,7 @@ namespace Testinator.Server.Core
         /// <param name="newGrading">Item that has been clicked</param>
         private void CriteriaItemSelected(GradingPercentage newGrading)
         {
-            PointsGrading = newGrading.ToPoints(IoCServer.TestEditor.Builder.CurrentPointScore);
+            PointsGrading = newGrading.ToPoints(DI.TestEditor.Builder.CurrentPointScore);
             IsCriteriaEditModeOn = false;
             ErrorMessage = "";
             MatchPropertiesWithCriteria();
@@ -168,7 +170,7 @@ namespace Testinator.Server.Core
             CriteriaListViewModel.Instance.ShouldSelectIndicatorBeVisible = false;
             CriteriaListViewModel.Instance.ItemSelected += CriteriaItemSelected;
 
-            PointsGrading =  new GradingPercentage().ToPoints(IoCServer.TestEditor.CurrentPointScore);
+            PointsGrading =  new GradingPercentage().ToPoints(DI.TestEditor.CurrentPointScore);
 
             MatchPropertiesWithCriteria();
         }
@@ -207,13 +209,13 @@ namespace Testinator.Server.Core
                 if (PointsGrading.IsMarkAIncluded)
                 {
                     // The highest value must be test's max points
-                    if (topMarkA != IoCServer.TestEditor.Builder.CurrentPointScore) throw new Exception();
+                    if (topMarkA != DI.TestEditor.Builder.CurrentPointScore) throw new Exception();
                     if (bottomMarkA <= topMarkB) throw new Exception();
                 }
                 else
                 {
                     // The highest value must be test's max points
-                    if (topMarkB != IoCServer.TestEditor.Builder.CurrentPointScore) throw new Exception();
+                    if (topMarkB != DI.TestEditor.Builder.CurrentPointScore) throw new Exception();
                 }
                 if (bottomMarkB <= topMarkC) throw new Exception();
                 if (bottomMarkC <= topMarkD) throw new Exception();

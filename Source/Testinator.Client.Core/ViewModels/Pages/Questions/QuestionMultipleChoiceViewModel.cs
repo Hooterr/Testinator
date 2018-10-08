@@ -21,7 +21,7 @@ namespace Testinator.Client.Core
         /// The title which shows question id
         /// </summary>
         public string QuestionPageCounter => 
-            IsReadOnly ? "Pytanie " + DisplayIndex +  " / " + IoCClient.TestHost.Questions.Count : "Pytanie " + IoCClient.TestHost.CurrentQuestionString;
+            IsReadOnly ? "Pytanie " + DisplayIndex +  " / " + IoCClient.DI.TestHost.Questions.Count : "Pytanie " + IoCClient.DI.TestHost.CurrentQuestionString;
 
         /// <summary>
         /// Options for the questions to choose from eg. A, B, C...
@@ -134,10 +134,10 @@ namespace Testinator.Client.Core
             {
                 SelectedAnswerIndex = CurrentlySelectedIdx - 1,
             };
-            IoCClient.TestHost.SaveAnswer(answer);
+            IoCClient.DI.TestHost.SaveAnswer(answer);
 
             // Go to next question page
-            IoCClient.TestHost.GoNextQuestion();
+            IoCClient.DI.TestHost.GoNextQuestion();
         }
 
         /// <summary>

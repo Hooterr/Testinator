@@ -14,32 +14,32 @@ namespace Testinator.Client.Core
         /// <summary>
         /// The name of the test user has completed
         /// </summary>
-        public string TestName => IoCClient.TestHost.CurrentTest.Info.Name;
+        public string TestName => IoCClient.DI.TestHost.CurrentTest.Info.Name;
 
         /// <summary>
         /// The time in which user has completed the test
         /// </summary>
-        public TimeSpan CompletionTime => IoCClient.TestHost.CurrentTest.Info.Duration - IoCClient.Application.TimeLeft;
+        public TimeSpan CompletionTime => IoCClient.DI.TestHost.CurrentTest.Info.Duration - IoCClient.Application.TimeLeft;
 
         /// <summary>
         /// The score user achieved in a string format
         /// </summary>
-        public string UserScore => $"{IoCClient.TestHost.UserScore} / {IoCClient.TestHost.CurrentTest.TotalPointScore}";
+        public string UserScore => $"{IoCClient.DI.TestHost.UserScore} / {IoCClient.DI.TestHost.CurrentTest.TotalPointScore}";
 
         /// <summary>
         /// Indicates if the server app has allowed user to check his answers just after he finishes his test
         /// </summary>
-        public bool IsResultPageAllowed => IoCClient.TestHost.AreResultsAllowed;
+        public bool IsResultPageAllowed => IoCClient.DI.TestHost.AreResultsAllowed;
 
         /// <summary>
         /// The tooltip string for the "See results" button
         /// </summary>
-        public string ToolTipResultPage => IoCClient.TestHost.AreResultsAllowed ? "" : "Wgląd do wyników został wyłączony przez administratora";
+        public string ToolTipResultPage => IoCClient.DI.TestHost.AreResultsAllowed ? "" : "Wgląd do wyników został wyłączony przez administratora";
 
         /// <summary>
         /// The mark user has achieved by doing the test
         /// </summary>
-        public Marks UserMark => IoCClient.TestHost.UserMark;
+        public Marks UserMark => IoCClient.DI.TestHost.UserMark;
 
         #endregion
 
@@ -79,7 +79,7 @@ namespace Testinator.Client.Core
         private void Exit()
         {
             // Reset the test host
-            IoCClient.TestHost.Reset();
+            IoCClient.DI.TestHost.Reset();
 
             IoCClient.Application.ReturnMainScreen();
 

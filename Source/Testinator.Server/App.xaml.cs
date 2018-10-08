@@ -1,11 +1,13 @@
-﻿using System.Diagnostics;
+﻿using Dna;
+using System;
 using System.Globalization;
 using System.Net;
-using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
 using Testinator.Core;
 using Testinator.Server.Core;
+
+using static Testinator.Server.Core.DI;
 
 namespace Testinator.Server
 {
@@ -24,32 +26,49 @@ namespace Testinator.Server
             base.OnStartup(e);
 
             // Setup the main application 
-            ApplicationSetup();
-
-            IoCServer.Logger.Log("Application starting...");
+            await ApplicationSetupAsync();
+            
+            Logger.LogCriticalSource("Application starting...");
 
             // Show the main window
             Current.MainWindow = new MainWindow();
             Current.MainWindow.Show();
 
+            // TODO: restore check for updates
             // Check for updates
-            if (await CheckUpdatesAsync())
+            /*if (await CheckUpdatesAsync())
             {
-                IoCServer.Logger.Log("Running updater...");
+                Logger.LogDebugSource("Running updater...");
 
                 // Run the updater
                 Process.Start(new ProcessStartInfo
                 {
                     FileName = "Testinator.Updater.exe",
-                    Arguments = "Server" + " " + IoCServer.Application.ApplicationLanguage + " " + "",
+                    Arguments = "Server" + " " + Application.ApplicationLanguage + " " + "",
                     UseShellExecute = true,
                     Verb = "runas"
                 });
 
                 // Close this app
-                IoCServer.Logger.Log("Main application closing...");
+                Logger.LogDebugSource("Main application closing...");
                 Current.Shutdown();
-            }
+            }*/
+        }
+
+        private async Task ApplicationSetupAsync()
+        {
+            Framework.Construct<DefaultFrameworkConstruction>()
+                .AddFileLogger(GetLogFileName())
+                .AddApplicationServices()
+                .AddApplicationViewModels()
+                .Build();
+
+            await DI.AppDbContext.Database.EnsureCreatedAsync();
+        }
+
+        private string GetLogFileName()
+        {
+            return $"ServerLog{DateTime.Now.ToString().Replace("/", "-").Replace(" ", "-").Replace(":", "-")}.txt";
         }
 
         /// <summary>
@@ -59,22 +78,6 @@ namespace Testinator.Server
         {
             // Default language
             LocalizationResource.Culture = new CultureInfo("pl-PL");
-
-            // Bind a UI Manager
-            IoCServer.Kernel.Bind<IUIManager>().ToConstant(new UIManager());
-
-            // Setup IoC
-            IoCServer.Setup();
-
-            // Bind a logger
-            IoCServer.Kernel.Bind<ILogFactory>().ToConstant(new BaseLogFactory(new[]
-            {
-                // Set the path from Settings
-                new FileLogger(IoCServer.Settings.LogFilePath)
-            }));
-
-            // Bind a File Writer
-            IoCServer.Kernel.Bind<FileManagerBase>().ToConstant(new LogsWriter());
         }
 
         /// <summary>
@@ -83,7 +86,7 @@ namespace Testinator.Server
         /// <param name="e"></param>
         protected override void OnExit(ExitEventArgs e)
         {
-            IoCServer.Application.Close();
+            DI.Application.Close();
         }
 
         /// <summary>
@@ -95,7 +98,7 @@ namespace Testinator.Server
             {
                 // Set webservice's url and parameters we want to send
                 var url = "http://minorsonek.pl/testinator/data/index.php";
-                var parameters = $"version={ IoCServer.Application.Version.ToString() }&type=Server";
+                var parameters = $"version={ DI.Application.Version.ToString() }&type=Server";
 
                 // Catch the result
                 var result = string.Empty;
@@ -121,7 +124,7 @@ namespace Testinator.Server
                                 AcceptText = LocalizationResource.Sure,
                                 CancelText = LocalizationResource.SkipUpdate
                             };
-                            await IoCServer.UI.ShowMessage(vm);
+                            await UI.ShowMessage(vm);
 
                             // Depending on the answer...
                             return vm.UserResponse;
@@ -130,7 +133,7 @@ namespace Testinator.Server
                     case "New update IMP":
                         {
                             // An important update, inform the user and update
-                            await IoCServer.UI.ShowMessage(new MessageBoxDialogViewModel
+                            await UI.ShowMessage(new MessageBoxDialogViewModel
                             {
                                 Title = LocalizationResource.NewImportantUpdate,
                                 Message = LocalizationResource.NewImportantUpdateInfo,

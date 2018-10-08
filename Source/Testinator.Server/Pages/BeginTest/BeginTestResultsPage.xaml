@@ -20,7 +20,7 @@
                 <RowDefinition Height="65"/>
             </Grid.RowDefinitions>
 
-            <StackPanel DataContext="{Binding TestHost.Results, Source={x:Static local:ViewModelLocator.Instance}}">
+            <StackPanel DataContext="{Binding DI.TestHost.Results, Source={x:Static local:ViewModelLocator.Instance}}">
 
                 <TextBlock Text="{Binding Test.Name}" 
                            HorizontalAlignment="Center"
@@ -34,7 +34,7 @@
             </StackPanel>
 
             <DataGrid AutoGenerateColumns="False" 
-                      DataContext="{Binding TestHost.Results, Source={x:Static local:ViewModelLocator.Instance}}"
+                      DataContext="{Binding DI.TestHost.Results, Source={x:Static local:ViewModelLocator.Instance}}"
                       ItemsSource="{Binding Clients}"
                       HorizontalAlignment="Stretch"
                       HorizontalContentAlignment="Stretch"

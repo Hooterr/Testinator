@@ -7,6 +7,8 @@ namespace Testinator.Server.Core
     /// <summary>
     /// The application state as a view model
     /// </summary>
+    // TODO: Improve naming convetion. It's not really a view model since it's not bound to any specific view. 
+    // In fact it manages the whole application. Should propably thing off a different name then.
     public class ApplicationViewModel : PageHostViewModel
     {
         #region Public Properties

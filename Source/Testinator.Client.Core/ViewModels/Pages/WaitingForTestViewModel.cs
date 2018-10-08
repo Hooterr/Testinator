@@ -26,23 +26,23 @@ namespace Testinator.Client.Core
         /// <summary>
         /// The name of the test
         /// </summary>
-        public string TestName => IoCClient.TestHost.IsTestReceived ? IoCClient.TestHost.CurrentTest.Info.Name : "";
+        public string TestName => IoCClient.DI.TestHost.IsTestReceived ? IoCClient.DI.TestHost.CurrentTest.Info.Name : "";
 
         /// <summary>
         /// The duration of the test
         /// </summary>
-        public TimeSpan TestDuration => IoCClient.TestHost.IsTestReceived ? IoCClient.TestHost.CurrentTest.Info.Duration : TimeSpan.Zero;
+        public TimeSpan TestDuration => IoCClient.DI.TestHost.IsTestReceived ? IoCClient.DI.TestHost.CurrentTest.Info.Duration : TimeSpan.Zero;
 
         /// <summary>
         /// How much score can user get from this test
         /// </summary>
-        public int TestPossibleScore => IoCClient.TestHost.IsTestReceived ? IoCClient.TestHost.CurrentTest.TotalPointScore : 0;
+        public int TestPossibleScore => IoCClient.DI.TestHost.IsTestReceived ? IoCClient.DI.TestHost.CurrentTest.TotalPointScore : 0;
 
         /// <summary>
         /// A flag indicating if we have any test to show,
         /// to show corresponding content in the WaitingPage
         /// </summary>
-        public bool IsTestReceived => IoCClient.TestHost.IsTestReceived;
+        public bool IsTestReceived => IoCClient.DI.TestHost.IsTestReceived;
 
         #endregion
 
@@ -58,7 +58,7 @@ namespace Testinator.Client.Core
             Surname = new TextEntryViewModel { Label = "Nazwisko", OriginalText = IoCClient.Client.LastName };
 
             // Listen out for test which will come from server
-            IoCClient.TestHost.OnTestReceived += Update;
+            IoCClient.DI.TestHost.OnTestReceived += Update;
 
             // Hook to the events
             Name.ValueChanged += Name_ValueChanged;

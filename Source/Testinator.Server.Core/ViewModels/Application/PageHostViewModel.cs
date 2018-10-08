@@ -1,4 +1,7 @@
-﻿using Testinator.Core;
+﻿using Dna;
+using Testinator.Core;
+
+using static Testinator.Server.Core.DI;
 
 namespace Testinator.Server.Core
 {
@@ -39,7 +42,7 @@ namespace Testinator.Server.Core
             OnPropertyChanged(nameof(CurrentPageViewModel));
 
             // Log it
-            IoCServer.Logger.Log("Changing application page to:" + page.ToString());
+            Logger.LogDebugSource("Changing application page to:" + page.ToString());
         }
 
         #endregion

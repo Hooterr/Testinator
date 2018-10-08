@@ -1,6 +1,9 @@
-﻿using System;
+﻿using Dna;
+using System;
 using System.ComponentModel;
 using Testinator.Core;
+
+using static Testinator.Server.Core.DI;
 
 namespace Testinator.Server.Core
 {
@@ -80,12 +83,12 @@ namespace Testinator.Server.Core
                 switch(mLanguageIndex)
                 {
                     case 1:
-                        IoCServer.UI.ChangeLanguage("en-US");
+                        UI.ChangeLanguage("en-US");
                         break;
 
                     // 0 or any not found index is default - Polish language
                     default:
-                        IoCServer.UI.ChangeLanguage("pl-PL");
+                        UI.ChangeLanguage("pl-PL");
                         break;
                 }
             }
@@ -136,7 +139,7 @@ namespace Testinator.Server.Core
             catch (Exception ex)
             {
                 // If an error occured, show info to the user
-                IoCServer.UI.ShowMessage(new MessageBoxDialogViewModel
+                UI.ShowMessage(new MessageBoxDialogViewModel
                 {
                     Title = LocalizationResource.LoadingError,
                     Message = LocalizationResource.UnableToLoadConfigFile + "\n" +
@@ -144,7 +147,7 @@ namespace Testinator.Server.Core
                     OkText = LocalizationResource.Ok
                 });
 
-                IoCServer.Logger.Log("Unable to read config from local folder, error message: " + ex.Message);
+                Logger.LogDebugSource("Unable to read config from local folder, error message: " + ex.Message);
             }
         }
 
@@ -172,7 +175,7 @@ namespace Testinator.Server.Core
             catch (Exception ex)
             {
                 // If an error occured, show info to the user
-                IoCServer.UI.ShowMessage(new MessageBoxDialogViewModel
+                UI.ShowMessage(new MessageBoxDialogViewModel
                 {
                     Title = LocalizationResource.SavingError,
                     Message = LocalizationResource.UnableToSaveConfigFile + "\n" +
@@ -180,7 +183,7 @@ namespace Testinator.Server.Core
                     OkText = LocalizationResource.Ok
                 });
 
-                IoCServer.Logger.Log("Unable to write new property value to the config, error message: " + ex.Message);
+                Logger.LogDebugSource("Unable to write new property value to the config, error message: " + ex.Message);
             }
         }
 

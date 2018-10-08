@@ -1,6 +1,8 @@
 ﻿using System.Windows.Input;
 using Testinator.Core;
 
+using static Testinator.Server.Core.DI;
+
 namespace Testinator.Server.Core
 {
     /// <summary>
@@ -66,7 +68,7 @@ namespace Testinator.Server.Core
                 return;
 
             // Simply change page in the application
-            IoCServer.Application.GoToPage(TargetPage);
+            Application.GoToPage(TargetPage);
         }
 
         #endregion

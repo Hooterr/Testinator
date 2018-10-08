@@ -1,5 +1,7 @@
 ﻿using Testinator.Server.Core;
 
+using static Testinator.Server.Core.DI;
+
 namespace Testinator.Server
 {
     /// <summary>
@@ -17,17 +19,17 @@ namespace Testinator.Server
         /// <summary>
         /// The application view model
         /// </summary>
-        public static ApplicationViewModel ApplicationViewModel => IoCServer.Application;
+        public static ApplicationViewModel ApplicationViewModel => Application;
 
         /// <summary>
         /// The shortcut to the test host
         /// </summary>
-        public static TestHost TestHost => IoCServer.TestHost;
+        public static TestHost TestHost => DI.TestHost;
 
         /// <summary>
         /// The shortcut to the test editor
         /// </summary>
-        public static TestEditor TestEditor => IoCServer.TestEditor;
+        public static TestEditor TestEditor => DI.TestEditor;
 
 
         #endregion

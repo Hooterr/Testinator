@@ -10,11 +10,11 @@ namespace Testinator.Server.Repositories.Base
     /// </summary>
     public abstract class BaseRepository<T, K> : IRepository<T, K> where T : class, IBaseObject<K>, new()
     {
-        protected TestinatorAppDataContext Db { get; set; }
+        protected TestinatorAppDbContext Db { get; set; }
 
         protected abstract DbSet<T> DbSet { get; }
 
-        public BaseRepository(TestinatorAppDataContext db)
+        public BaseRepository(TestinatorAppDbContext db)
         {
             Db = db;
         }

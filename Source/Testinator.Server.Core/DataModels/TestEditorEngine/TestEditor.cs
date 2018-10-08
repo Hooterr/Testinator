@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using Testinator.Core;
 
+using static Testinator.Server.Core.DI;
+
 namespace Testinator.Server.Core
 {
     /// <summary>
@@ -169,9 +171,9 @@ namespace Testinator.Server.Core
                     CancelText = "No",
                     Title = "Exit",
                 };
-                IoCServer.UI.ShowMessage(vm);
+                UI.ShowMessage(vm);
                 if (vm.UserResponse)
-                    IoCServer.Application.GoToPage(ApplicationPage.TestEditorInitial);
+                    Application.GoToPage(ApplicationPage.TestEditorInitial);
             }
         }
 
@@ -212,9 +214,9 @@ namespace Testinator.Server.Core
             if (IsInEditMode)
                 FileName = "";
 
-            var Test = IoCServer.TestEditor.Builder.GetResult();
+            var Test = DI.TestEditor.Builder.GetResult();
 
-            Test.Info.SoftwareVersion = IoCServer.Application.Version;
+            Test.Info.SoftwareVersion = Application.Version;
 
             try
             {
@@ -222,7 +224,7 @@ namespace Testinator.Server.Core
             }
             catch (Exception ex)
             {
-                IoCServer.UI.ShowMessage(new MessageBoxDialogViewModel()
+                UI.ShowMessage(new MessageBoxDialogViewModel()
                 {
                     Title = "Test editor",
                     Message = $"Nie można zapisać pliku. Treść błędu: {ex.Message}",
@@ -241,7 +243,7 @@ namespace Testinator.Server.Core
         public void FinishAndClose()
         {
             CleanUp();
-            IoCServer.Application.GoToPage(ApplicationPage.TestEditorInitial);
+            Application.GoToPage(ApplicationPage.TestEditorInitial);
         }
 
         /// <summary>
@@ -277,7 +279,7 @@ namespace Testinator.Server.Core
         /// </summary>
         private void GoToInformationEditor()
         {
-            IoCServer.Application.GoToPage(ApplicationPage.TestEditorBasicInformationEditor, new TestEditorBasicInformationEditorViewModel(Builder.CurrentTestInfo));
+            Application.GoToPage(ApplicationPage.TestEditorBasicInformationEditor, new TestEditorBasicInformationEditorViewModel(Builder.CurrentTestInfo));
             CurrentOperation = Operation.EditingInformation;
         }
 
@@ -286,7 +288,7 @@ namespace Testinator.Server.Core
         /// </summary>
         private void GoToQuestionsEditor()
         {
-            IoCServer.Application.GoToPage(ApplicationPage.TestEditorQuestionsEditor, new TestEditorQuestionsEditorViewModel(Builder.CurrentQuestions));
+            Application.GoToPage(ApplicationPage.TestEditorQuestionsEditor, new TestEditorQuestionsEditorViewModel(Builder.CurrentQuestions));
             CurrentOperation = Operation.EditingQuestions;
         }
 
@@ -295,7 +297,7 @@ namespace Testinator.Server.Core
         /// </summary>
         private void GoToCriteriaEditor()
         {
-            IoCServer.Application.GoToPage(ApplicationPage.TestEditorAttachCriteria, new TestEditorAttachCriteriaViewModel());
+            Application.GoToPage(ApplicationPage.TestEditorAttachCriteria, new TestEditorAttachCriteriaViewModel());
             CurrentOperation = Operation.EditingCriteria;
         }
 
@@ -304,7 +306,7 @@ namespace Testinator.Server.Core
         /// </summary>
         private void GoToFinalizing()
         {
-            IoCServer.Application.GoToPage(ApplicationPage.TestEditorFinalize, new TestEditorFinalizingViewModel());
+            Application.GoToPage(ApplicationPage.TestEditorFinalize, new TestEditorFinalizingViewModel());
             CurrentOperation = Operation.Finalizing;
         }
 

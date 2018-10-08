@@ -2,6 +2,8 @@
 using System.Windows.Input;
 using Testinator.Core;
 
+using static Testinator.Server.Core.DI;
+
 namespace Testinator.Server.Core
 {
     /// <summary>
@@ -113,7 +115,7 @@ namespace Testinator.Server.Core
         private void Return()
         {
             var viewmodel = new TestResultsDetailsViewModel(Results);
-            IoCServer.Application.GoToPage(ApplicationPage.TestResultsDetails, viewmodel); 
+            Application.GoToPage(ApplicationPage.TestResultsDetails, viewmodel); 
         }
 
         #endregion

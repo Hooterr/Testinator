@@ -1,6 +1,8 @@
 ﻿using Testinator.Server.Core;
 using Testinator.UICore;
 
+using static Testinator.Server.Core.DI;
+
 namespace Testinator.Server
 {
     /// <summary>
@@ -18,7 +20,7 @@ namespace Testinator.Server
             InitializeComponent();
 
             // Attach the single instance of IoC view model to this page
-            DataContext = IoCServer.Settings;
+            DataContext = Settings;
         }
 
         #endregion

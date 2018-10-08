@@ -2,6 +2,8 @@
 using System.Windows.Input;
 using Testinator.Core;
 
+using static Testinator.Server.Core.DI;
+
 namespace Testinator.Server.Core
 {
     /// <summary>
@@ -109,7 +111,7 @@ namespace Testinator.Server.Core
             {
                 // Follow the order of properties like in the view
 
-                IoCServer.TestEditor.Builder.AddName(Name);
+                DI.TestEditor.Builder.AddName(Name);
 
                 if (string.IsNullOrEmpty(DurationHours))
                     DurationHours = "00";
@@ -131,11 +133,11 @@ namespace Testinator.Server.Core
                     throw new Exception("Niepoprawna wartość w polu sekund.");
 
 
-                IoCServer.TestEditor.Builder.AddDuration(new TimeSpan(durationHours, durationMinutes, durationSeconds));
+                DI.TestEditor.Builder.AddDuration(new TimeSpan(durationHours, durationMinutes, durationSeconds));
 
-                IoCServer.TestEditor.Builder.AddTags(Tags);
+                DI.TestEditor.Builder.AddTags(Tags);
 
-                IoCServer.TestEditor.Builder.AddNote(Note);
+                DI.TestEditor.Builder.AddNote(Note);
 
             }
             catch (Exception ex)
@@ -149,11 +151,11 @@ namespace Testinator.Server.Core
             {
                 if (mOriginalInfo.Name != Name || mOriginalInfo.Duration.TotalSeconds != (durationHours * 3600 + durationMinutes * 60 + durationSeconds) ||
                   mOriginalInfo.Tags != Tags || mOriginalInfo.Note != Note)
-                    IoCServer.TestEditor.TestChanged();
+                    DI.TestEditor.TestChanged();
             }
 
             // If everything went fine proceed to the next phase of creation/edition of this test
-            IoCServer.TestEditor.GoNextPhase();
+            DI.TestEditor.GoNextPhase();
         }
 
         #endregion
@@ -204,7 +206,7 @@ namespace Testinator.Server.Core
         private void CreateCommands()
         {
             SubmitCommand = new RelayCommand(Submit);
-            ExitCommand = new RelayCommand(() => IoCServer.TestEditor.Exit());
+            ExitCommand = new RelayCommand(() => DI.TestEditor.Exit());
         }
 
         #endregion

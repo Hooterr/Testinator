@@ -310,7 +310,7 @@ namespace Testinator.Client
             CloseCommand = new RelayCommand(() =>
             {
                 // Check if any test is already in progress
-                if (IoCClient.TestHost.IsTestInProgress)
+                if (IoCClient.DI.TestHost.IsTestInProgress)
                 {
                     // Show warning to the user and do not close the app
                     IoCClient.UI.ShowMessage(new MessageBoxDialogViewModel

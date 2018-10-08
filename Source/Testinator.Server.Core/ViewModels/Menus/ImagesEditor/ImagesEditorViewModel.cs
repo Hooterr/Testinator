@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Dna;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
@@ -6,6 +7,8 @@ using System.IO;
 using System.Linq;
 using System.Windows.Input;
 using Testinator.Core;
+
+using static Testinator.Server.Core.DI;
 
 namespace Testinator.Server.Core
 {
@@ -170,7 +173,7 @@ namespace Testinator.Server.Core
             if (CanAddImages)
             {
                 // Move file types somewhere else
-                var fileName = IoCServer.UI.ShowSingleFileDialog(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "png files (*.png)|*.png|jpg files (*.jpg)|*.jpg|bmp files (*.bmp)|*.bm/p");
+                var fileName = UI.ShowSingleFileDialog(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "png files (*.png)|*.png|jpg files (*.jpg)|*.jpg|bmp files (*.bmp)|*.bm/p");
 
                 // The user did not selected any files
                 if (string.IsNullOrEmpty(fileName))
@@ -185,7 +188,7 @@ namespace Testinator.Server.Core
                 }
                 catch (FileNotFoundException ex)
                 {
-                    IoCServer.UI.ShowMessage(new MessageBoxDialogViewModel()
+                    UI.ShowMessage(new MessageBoxDialogViewModel()
                     {
                         Message = $"Nie można wczytać pliku. Błąd: {ex.Message}",
                         OkText = "OK",
@@ -195,7 +198,7 @@ namespace Testinator.Server.Core
                 }
                 catch (Exception ex)
                 {
-                    IoCServer.UI.ShowMessage(new MessageBoxDialogViewModel()
+                    UI.ShowMessage(new MessageBoxDialogViewModel()
                     {
                         Message = ex.Message,
                         OkText = "OK",
@@ -335,7 +338,7 @@ namespace Testinator.Server.Core
             }
             catch
             {
-                IoCServer.Logger.Log("Developer error. Code: 2");
+                Logger.LogDebugSource("Developer error. Code: 2");
                 return -1;
             }
             return index;

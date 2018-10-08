@@ -1,6 +1,8 @@
 ﻿using System.Windows.Input;
 using Testinator.Core;
 
+using static Testinator.Server.Core.DI;
+
 namespace Testinator.Server.Core
 {
     /// <summary>
@@ -37,8 +39,8 @@ namespace Testinator.Server.Core
             // Create commands
             CreateNewTestCommand = new RelayCommand(() =>
             {
-                IoCServer.TestEditor.CreateNewTest();
-                IoCServer.TestEditor.Start();
+                DI.TestEditor.CreateNewTest();
+                DI.TestEditor.Start();
             });
 
             EditManageTestCommand = new RelayCommand(() => ChangePage(ApplicationPage.TestEditorTestManagmentPage));
@@ -56,7 +58,7 @@ namespace Testinator.Server.Core
         private void ChangePage(ApplicationPage page)
         {
             // Simply change page
-            IoCServer.Application.GoToPage(page);
+            Application.GoToPage(page);
         }
 
         #endregion

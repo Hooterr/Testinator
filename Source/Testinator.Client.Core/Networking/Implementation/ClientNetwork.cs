@@ -68,14 +68,14 @@ namespace Testinator.Client.Core
             IoCClient.Logger.Log("Network connection lost");
 
             // Dont'try to reconnect if in the result page, because the test result has been already sent to the server
-            if (IoCClient.TestHost.IsShowingResultPage)
+            if (IoCClient.DI.TestHost.IsShowingResultPage)
                 return;
 
             // If the test in progress
-            if (IoCClient.TestHost.IsTestInProgress)
+            if (IoCClient.DI.TestHost.IsTestInProgress)
             {
                 // Notify the test host about the disconnection
-                //IoCClient.TestHost.NetworkDisconnected();
+                //IoCClient.DI.TestHost.NetworkDisconnected();
 
                 // Set attempting to reconnect
                 AttemptingToReconnect = true;
@@ -98,11 +98,11 @@ namespace Testinator.Client.Core
             IoCClient.Logger.Log("Network disconnected");
 
             // Dont'try to reconnect if in the result page, because the test result has been already sent to the server
-            if (IoCClient.TestHost.IsShowingResultPage)
+            if (IoCClient.DI.TestHost.IsShowingResultPage)
                 return;
 
             // If not in reults page show login page
-            if (!IoCClient.TestHost.IsTestInProgress)
+            if (!IoCClient.DI.TestHost.IsTestInProgress)
                 IoCClient.UI.DispatcherThreadAction(() => IoCClient.Application.GoToPage(ApplicationPage.Login));
         }
 
@@ -128,7 +128,7 @@ namespace Testinator.Client.Core
             }
             //else
                 // Notify the test host
-                //IoCClient.TestHost.NetworkReconnected();
+                //IoCClient.DI.TestHost.NetworkReconnected();
             
             // Save current IP to the file, as connection was successful
             SaveNetworkConfigToFile();
@@ -144,19 +144,19 @@ namespace Testinator.Client.Core
             {
                 case PackageType.TestForm:
                     // Bind the newly received test
-                    IoCClient.TestHost.BindTest(DataReceived.Content as Test);
+                    IoCClient.DI.TestHost.BindTest(DataReceived.Content as Test);
                     break;
 
                 case PackageType.BeginTest:
 
                     var args = DataReceived.Content as TestStartupArgs;
 
-                    IoCClient.TestHost.SetupArguments(args);
-                    IoCClient.TestHost.StartTest();
+                    IoCClient.DI.TestHost.SetupArguments(args);
+                    IoCClient.DI.TestHost.StartTest();
                     break;
 
                 case PackageType.StopTestForcefully:
-                    IoCClient.TestHost.AbortTest();
+                    IoCClient.DI.TestHost.AbortTest();
                     break;
 
             }

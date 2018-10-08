@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using Testinator.Core;
+
+using static Testinator.Server.Core.DI;
 
 namespace Testinator.Server.Core
 {
@@ -97,7 +98,7 @@ namespace Testinator.Server.Core
             FileDataHasher.HashAndSaveString(PIN);
 
             // Log the user in by changing the page
-            IoCServer.Application.GoToPage(ApplicationPage.Home);
+            Application.GoToPage(ApplicationPage.Home);
         }
 
         /// <summary>
@@ -114,7 +115,7 @@ namespace Testinator.Server.Core
             }
 
             // Otherwise login the user in by changing the page
-            IoCServer.Application.GoToPage(ApplicationPage.Home);
+            Application.GoToPage(ApplicationPage.Home);
         }
 
         #endregion

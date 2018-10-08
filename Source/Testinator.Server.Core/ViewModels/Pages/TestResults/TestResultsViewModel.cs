@@ -1,7 +1,10 @@
-﻿using System;
+﻿using Dna;
+using System;
 using System.Collections.Generic;
 using System.Windows.Input;
 using Testinator.Core;
+
+using static Testinator.Server.Core.DI;
 
 namespace Testinator.Server.Core
 {
@@ -105,7 +108,7 @@ namespace Testinator.Server.Core
                 return;
 
             var viewmodel = new TestResultsDetailsViewModel(selectedItem);
-            IoCServer.Application.GoToPage(ApplicationPage.TestResultsDetails, viewmodel);
+            Application.GoToPage(ApplicationPage.TestResultsDetails, viewmodel);
         }
 
         /// <summary>
@@ -134,7 +137,7 @@ namespace Testinator.Server.Core
                 AcceptText = LocalizationResource.Yes,
                 CancelText = LocalizationResource.No,
             };
-            IoCServer.UI.ShowMessage(vm);
+            UI.ShowMessage(vm);
 
             if (vm.UserResponse == false)
                 return;
@@ -147,7 +150,7 @@ namespace Testinator.Server.Core
             catch (Exception ex)
             {
                 // If an error occured, show info to the user
-                IoCServer.UI.ShowMessage(new MessageBoxDialogViewModel
+                UI.ShowMessage(new MessageBoxDialogViewModel
                 {
                     Title = LocalizationResource.DeletionError,
                     Message = "Nie udało się usunąć tego rezultatu." + "\n" +
@@ -155,7 +158,7 @@ namespace Testinator.Server.Core
                     OkText = LocalizationResource.Ok
                 });
 
-                IoCServer.Logger.Log("Unable to delete result from local folder, error message: " + ex.Message);
+                Logger.LogDebugSource("Unable to delete result from local folder, error message: " + ex.Message);
             }
 
             // Reload items

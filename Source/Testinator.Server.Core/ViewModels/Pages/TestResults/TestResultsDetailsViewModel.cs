@@ -1,8 +1,11 @@
-﻿using System;
+﻿using Dna;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
 using Testinator.Core;
+
+using static Testinator.Server.Core.DI;
 
 namespace Testinator.Server.Core
 {
@@ -101,7 +104,7 @@ namespace Testinator.Server.Core
         /// </summary>
         private void ReturnPreviousPage()
         {
-            IoCServer.Application.GoToPage(ApplicationPage.TestResultsInitial);
+            Application.GoToPage(ApplicationPage.TestResultsInitial);
         }
 
         /// <summary>
@@ -138,7 +141,7 @@ namespace Testinator.Server.Core
             var totalScore = 0;
 
             // Log what we are doing
-            IoCServer.Logger.Log("Preparing view data to show user's answers");
+            Logger.LogDebugSource("Preparing view data to show user's answers");
 
             // Get the questions from the test
             var Questions = mTestResults.Test.Questions;
@@ -247,7 +250,7 @@ namespace Testinator.Server.Core
                 QuestionListItems = QuestionListItemsViewModels,
             };
 
-            IoCServer.Application.GoToPage(ApplicationPage.ResultQuestions, questionsViewmodel);
+            Application.GoToPage(ApplicationPage.ResultQuestions, questionsViewmodel);
 
             questionsViewmodel.ShowFirstQuestion();
         }

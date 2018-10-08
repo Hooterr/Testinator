@@ -127,7 +127,7 @@
         <!-- Timer -->
         <Border Grid.Row="0" 
                 Panel.ZIndex="100"
-                Animations:AnimateSlideInFromTopProperty.Value="{Binding TestHost.IsTestInProgress,
+                Animations:AnimateSlideInFromTopProperty.Value="{Binding DI.TestHost.IsTestInProgress,
                                                                     Source={x:Static local:ViewModelLocator.Instance}}"
                 BorderThickness="1 0 0 2"
                 BorderBrush="Black"
@@ -142,7 +142,7 @@
                         HorizontalAlignment="Center"
                         Margin="10 0">
 
-                <TextBlock Text="{Binding TestHost.TimeLeft, Source={x:Static local:ViewModelLocator.Instance}}"
+                <TextBlock Text="{Binding DI.TestHost.TimeLeft, Source={x:Static local:ViewModelLocator.Instance}}"
                            FontSize="{StaticResource FontSizeLarge}"
                            Style="{StaticResource MediumTitleText}"/>
             </StackPanel>

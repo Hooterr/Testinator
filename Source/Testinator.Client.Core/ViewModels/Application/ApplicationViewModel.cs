@@ -23,7 +23,7 @@ namespace Testinator.Client.Core
         /// <summary>
         /// Indicates how much time is left 
         /// </summary>
-        public TimeSpan TimeLeft => IoCClient.TestHost.TimeLeft;
+        public TimeSpan TimeLeft => IoCClient.DI.TestHost.TimeLeft;
 
         #endregion
 

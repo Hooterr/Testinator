@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
-using System.Windows.Input;
-using Testinator.Core;
-using Testinator.Server.Core;
+
+using static Testinator.Server.Core.DI;
 
 namespace Testinator.Server
 {
@@ -20,7 +19,7 @@ namespace Testinator.Server
         public override Task ShowDialog<T>(T viewmodel)
         {
             // Check if ApplicationSettings allow showing this type of dialog box
-            if (!IoCServer.Settings.AreInformationMessageBoxesAllowed)
+            if (!Settings.AreInformationMessageBoxesAllowed)
                 return Task.Delay(1);
 
             // Now we can show the message

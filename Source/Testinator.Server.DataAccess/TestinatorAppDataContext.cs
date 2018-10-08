@@ -3,9 +3,9 @@ using Testinator.Server.DataAccess.Entities;
 
 namespace Testinator.Server.DataAccess
 {
-    public class TestinatorAppDataContext : DbContext
+    public class TestinatorAppDbContext : DbContext
     {
-        public TestinatorAppDataContext(DbContextOptions<TestinatorAppDataContext> options) : base(options) { }
+        public TestinatorAppDbContext(DbContextOptions<TestinatorAppDbContext> options) : base(options) { }
 
         public DbSet<Setting> Settings { get; set; }
     }

@@ -26,37 +26,37 @@ namespace Testinator.Server.Core
         /// <summary>
         /// The name of the test
         /// </summary>
-        public string TestName => IoCServer.TestEditor.CurrentTestName;
+        public string TestName => DI.TestEditor.CurrentTestName;
 
         /// <summary>
         /// Duration of the test, already formatted
         /// </summary>
-        public string Duration => IoCServer.TestEditor.CurrentDuration;
+        public string Duration => DI.TestEditor.CurrentDuration;
 
         /// <summary>
         /// Current tags associated with the test
         /// </summary>
-        public string Tags => IoCServer.TestEditor.CurrentTags;
+        public string Tags => DI.TestEditor.CurrentTags;
 
         /// <summary>
         /// Current point score for this test
         /// </summary>
-        public string TotalPointsScore => IoCServer.TestEditor.CurrentPointScore.ToString();
+        public string TotalPointsScore => DI.TestEditor.CurrentPointScore.ToString();
 
         /// <summary>
         /// The number of multiple chocie questions
         /// </summary>
-        public int MultipleChoiceQuestionsCount => IoCServer.TestEditor.CurrentQuestionsNumber[QuestionType.MultipleChoice];
+        public int MultipleChoiceQuestionsCount => DI.TestEditor.CurrentQuestionsNumber[QuestionType.MultipleChoice];
 
         /// <summary>
         /// The number of multiple checkboxes questions
         /// </summary>
-        public int MultipleCheckBoxesQuestionsCount => IoCServer.TestEditor.CurrentQuestionsNumber[QuestionType.MultipleCheckboxes];
+        public int MultipleCheckBoxesQuestionsCount => DI.TestEditor.CurrentQuestionsNumber[QuestionType.MultipleCheckboxes];
 
         /// <summary>
         /// The number of single testbox questions
         /// </summary>
-        public int SingleTextBoxQuestionsCount => IoCServer.TestEditor.CurrentQuestionsNumber[QuestionType.SingleTextBox];
+        public int SingleTextBoxQuestionsCount => DI.TestEditor.CurrentQuestionsNumber[QuestionType.SingleTextBox];
 
         /// <summary>
         /// File name for this test
@@ -73,7 +73,7 @@ namespace Testinator.Server.Core
             {
                 // In edit mode file name cannot be changed
                 // TODO: save as... but after file classes rework
-                if (IoCServer.TestEditor.IsInEditMode)
+                if (DI.TestEditor.IsInEditMode)
                     return;
 
                 mDefaultFileName = value;
@@ -126,8 +126,8 @@ namespace Testinator.Server.Core
                 }
             }
 
-            if(IoCServer.TestEditor.Save(FileName))
-                IoCServer.TestEditor.FinishAndClose();
+            if(DI.TestEditor.Save(FileName))
+                DI.TestEditor.FinishAndClose();
         }
 
         /// <summary>
@@ -135,7 +135,7 @@ namespace Testinator.Server.Core
         /// </summary>
         private void GoPreviousPage()
         {
-            IoCServer.TestEditor.GoPreviousPage();
+            DI.TestEditor.GoPreviousPage();
         }
 
         #endregion
@@ -150,8 +150,8 @@ namespace Testinator.Server.Core
             GoPreviousPageCommand = new RelayCommand(GoPreviousPage);
             FinishCommand = new RelayCommand(Finish);
 
-            if (IoCServer.TestEditor.IsInEditMode)
-                FileName = IoCServer.TestEditor.GetCurrentTestFileName();
+            if (DI.TestEditor.IsInEditMode)
+                FileName = DI.TestEditor.GetCurrentTestFileName();
             else
                 FileName = GetFreeFileName();   
         }

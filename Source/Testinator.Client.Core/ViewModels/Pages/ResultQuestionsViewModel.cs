@@ -15,7 +15,7 @@ namespace Testinator.Client.Core
         /// <summary>
         /// Viewmodels for the questions
         /// </summary>
-        public List<BaseViewModel> Questions => IoCClient.TestHost.QuestionViewModels;
+        public List<BaseViewModel> Questions => IoCClient.DI.TestHost.QuestionViewModels;
 
         #endregion
 
