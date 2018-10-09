@@ -14,32 +14,32 @@ namespace Testinator.Client.Core
         /// <summary>
         /// The name of the test user has completed
         /// </summary>
-        public string TestName => IoCClient.DI.TestHost.CurrentTest.Info.Name;
+        public string TestName => DI.TestHost.CurrentTest.Info.Name;
 
         /// <summary>
         /// The time in which user has completed the test
         /// </summary>
-        public TimeSpan CompletionTime => IoCClient.DI.TestHost.CurrentTest.Info.Duration - IoCClient.Application.TimeLeft;
+        public TimeSpan CompletionTime => DI.TestHost.CurrentTest.Info.Duration - DI.Application.TimeLeft;
 
         /// <summary>
         /// The score user achieved in a string format
         /// </summary>
-        public string UserScore => $"{IoCClient.DI.TestHost.UserScore} / {IoCClient.DI.TestHost.CurrentTest.TotalPointScore}";
+        public string UserScore => $"{DI.TestHost.UserScore} / {DI.TestHost.CurrentTest.TotalPointScore}";
 
         /// <summary>
         /// Indicates if the server app has allowed user to check his answers just after he finishes his test
         /// </summary>
-        public bool IsResultPageAllowed => IoCClient.DI.TestHost.AreResultsAllowed;
+        public bool IsResultPageAllowed => DI.TestHost.AreResultsAllowed;
 
         /// <summary>
         /// The tooltip string for the "See results" button
         /// </summary>
-        public string ToolTipResultPage => IoCClient.DI.TestHost.AreResultsAllowed ? "" : "Wgląd do wyników został wyłączony przez administratora";
+        public string ToolTipResultPage => DI.TestHost.AreResultsAllowed ? "" : "Wgląd do wyników został wyłączony przez administratora";
 
         /// <summary>
         /// The mark user has achieved by doing the test
         /// </summary>
-        public Marks UserMark => IoCClient.DI.TestHost.UserMark;
+        public Marks UserMark => DI.TestHost.UserMark;
 
         #endregion
 
@@ -79,12 +79,12 @@ namespace Testinator.Client.Core
         private void Exit()
         {
             // Reset the test host
-            IoCClient.DI.TestHost.Reset();
+            DI.TestHost.Reset();
 
-            IoCClient.Application.ReturnMainScreen();
+            DI.Application.ReturnMainScreen();
 
             // Indicate we are ready for another test now
-            IoCClient.Application.Network.SendData(new DataPackage(PackageType.ReadyForTest));
+            DI.Application.Network.SendData(new DataPackage(PackageType.ReadyForTest));
         }
 
         /// <summary>
@@ -96,7 +96,7 @@ namespace Testinator.Client.Core
             if (!IsResultPageAllowed)
             {
                 // Show the message box with this info and don't change page
-                IoCClient.UI.ShowMessage(new MessageBoxDialogViewModel
+                DI.UI.ShowMessage(new MessageBoxDialogViewModel
                 {
                     Title = "Wstęp wzbroniony",
                     Message = "Dostęp do szczegółowych wyników testu został zabroniony przez serwer.",
@@ -110,7 +110,7 @@ namespace Testinator.Client.Core
             var viewmodel = new ResultQuestionsViewModel();
 
             // Change the page
-            IoCClient.Application.GoToPage(ApplicationPage.ResultQuestionsPage, viewmodel);
+            DI.Application.GoToPage(ApplicationPage.ResultQuestionsPage, viewmodel);
 
             // And show the first question
             viewmodel.ShowFirstQuestion();

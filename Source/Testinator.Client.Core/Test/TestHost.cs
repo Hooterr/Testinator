@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Dna;
+using System;
 using System.Collections.Generic;
 using System.Timers;
 using Testinator.Core;
@@ -155,7 +156,7 @@ namespace Testinator.Client.Core
                 throw new NullReferenceException("Cannot start the test");
 
             // Indicate that test is starting
-            IoCClient.Logger.Log("Starting test...");
+            DI.Logger.LogDebugSource("Starting test...");
 
             IsTestInProgress = true;
 
@@ -167,7 +168,7 @@ namespace Testinator.Client.Core
 
             // Enable full screen if required
             if (IsFullScreenEnabled)
-                IoCClient.UI.EnableFullscreenMode();
+                DI.UI.EnableFullscreenMode();
 
             // Show the first question
             GoNextQuestion();
@@ -182,10 +183,10 @@ namespace Testinator.Client.Core
             if (!IsTestInProgress)
                 return;
 
-            IoCClient.Logger.Log("Test has been stopped forcefully");
+            DI.Logger.LogDebugSource("Test has been stopped forcefully");
 
             // Show a message box with info about it
-            IoCClient.UI.ShowMessage(new MessageBoxDialogViewModel()
+            DI.UI.ShowMessage(new MessageBoxDialogViewModel()
             {
                 Title = "Test został zatrzymany!",
                 Message = "Test został zatrzymany na polecenie serwera.",
@@ -196,7 +197,7 @@ namespace Testinator.Client.Core
             Reset();
 
             // Return to the main screen
-            IoCClient.Application.ReturnMainScreen();
+            DI.Application.ReturnMainScreen();
         }
 
         /// <summary>
@@ -216,7 +217,7 @@ namespace Testinator.Client.Core
             TimeLeft = test.Info.Duration;
 
             // Randomize question order
-            IoCClient.Logger.Log("Shuffling questions");
+            DI.Logger.LogDebugSource("Shuffling questions");
             QuestionsOrder = (List<int>)Questions.Shuffle();
 
             // Indicate that we have received test
@@ -228,7 +229,7 @@ namespace Testinator.Client.Core
         /// </summary>
         public void Reset()
         {
-            IoCClient.Logger.Log("Reseting test host...");
+            DI.Logger.LogDebugSource("Reseting test host...");
 
             ResetQuestionNumber();
 
@@ -248,7 +249,7 @@ namespace Testinator.Client.Core
             IsResultSent = false;
             AreResultsAllowed = true;
 
-            IoCClient.Logger.Log("Reseting test host done.");
+            DI.Logger.LogDebugSource("Reseting test host done.");
         }
 
         /// <summary>
@@ -260,7 +261,7 @@ namespace Testinator.Client.Core
             // Save the answer
             UserAnswers.Add(answer);
 
-            IoCClient.Logger.Log($"User answer saved for question nr {CurrentQuestionString}.");
+            DI.Logger.LogDebugSource($"User answer saved for question nr {CurrentQuestionString}.");
 
             // Create view data from the results page if it is allowed to be shown
             if (AreResultsAllowed)
@@ -289,7 +290,7 @@ namespace Testinator.Client.Core
             }
 
             // Indicate that we are going to the next question
-            IoCClient.Logger.Log("Going to the next question");
+            DI.Logger.LogDebugSource("Going to the next question");
 
             // Go to the next question
             // NOTE: Although mCurrentQuestion starts from 0, it has been incremented above so we need to subtract one here
@@ -315,7 +316,7 @@ namespace Testinator.Client.Core
             // Total point score
             var totalScore = 0;
 
-            IoCClient.Logger.Log("Calculating user's score...");
+            DI.Logger.LogDebugSource("Calculating user's score...");
 
             for (var i = 0; i < CurrentTest.Questions.Count; i++)
             {
@@ -330,7 +331,7 @@ namespace Testinator.Client.Core
             UserScore = totalScore;
             UserMark = CurrentTest.Grading.GetMark(UserScore);
 
-            IoCClient.Logger.Log($"User score calculation finished. Total score: {totalScore}.");
+            DI.Logger.LogDebugSource($"User score calculation finished. Total score: {totalScore}.");
         }
 
         #endregion
@@ -344,7 +345,7 @@ namespace Testinator.Client.Core
         private bool TrySendResult()
         {
             // Send or save the data
-            if (IoCClient.Application.Network.IsConnected)
+            if (DI.Application.Network.IsConnected)
             {
                 // Create the data package first
                 var data = new DataPackage(PackageType.ResultForm)
@@ -359,10 +360,10 @@ namespace Testinator.Client.Core
                 };
 
                 // Send it
-                IoCClient.Application.Network.SendData(data);
+                DI.Application.Network.SendData(data);
                 IsResultSent = true;
 
-                IoCClient.Logger.Log($"Test results sent to the server");
+                DI.Logger.LogDebugSource($"Test results sent to the server");
 
                 return true;
             }
@@ -386,9 +387,9 @@ namespace Testinator.Client.Core
                     SessionIdentifier = SessionIdentifier,
                     Client = new TestResultsClientModel()
                     {
-                        Name = IoCClient.Client.Name,
-                        LastName = IoCClient.Client.LastName,
-                        MachineName = IoCClient.Client.MachineName,
+                        Name = DI.Client.Name,
+                        LastName = DI.Client.LastName,
+                        MachineName = DI.Client.MachineName,
                         Mark = UserMark,
                         PointsScored = UserScore,
                         QuestionsOrder = QuestionsOrder,
@@ -396,21 +397,21 @@ namespace Testinator.Client.Core
                     Test = CurrentTest,
                 });
 
-                IoCClient.UI.ShowMessage(new MessageBoxDialogViewModel
+                DI.UI.ShowMessage(new MessageBoxDialogViewModel
                 {
                     Title = "Wyniki testu w pliku",
                     Message = "Wyniki testu zostały zapisane do pliku, ponieważ połączenie z serwerem zostało utracone.",
                     OkText = "Ok"
                 });
 
-                IoCClient.Logger.Log($"Test results saved to file");
+                DI.Logger.LogDebugSource($"Test results saved to file");
 
                 return true;
 
             }
             catch (Exception ex)
             {
-                IoCClient.UI.ShowMessage(new MessageBoxDialogViewModel
+                DI.UI.ShowMessage(new MessageBoxDialogViewModel
                 {
                     Title = "Błąd zapisu",
                     Message = "Nie udało się zapisać ani wysłać wyników testu." +
@@ -418,7 +419,7 @@ namespace Testinator.Client.Core
                     OkText = "Ok"
                 });
 
-                IoCClient.Logger.Log($"Unable to save the results, error message: {ex.Message}");
+                DI.Logger.LogDebugSource($"Unable to save the results, error message: {ex.Message}");
 
                 return false;
             }
@@ -448,16 +449,16 @@ namespace Testinator.Client.Core
 
             // If full screen mode was fired, disable it
             if (IsFullScreenEnabled)
-                IoCClient.UI.DisableFullscreenMode();
+                DI.UI.DisableFullscreenMode();
 
             // Change page to the result page
-            IoCClient.UI.DispatcherThreadAction(() => IoCClient.Application.GoToPage(ApplicationPage.ResultOverviewPage));
+            DI.UI.DispatcherThreadAction(() => DI.Application.GoToPage(ApplicationPage.ResultOverviewPage));
 
             // Indicate that we're in the result page
             IsShowingResultPage = true;
 
             // Dont need the connection in the result page so stop reconnecting if meanwhile connection has been lost
-            IoCClient.Application.Network.StopReconnecting();
+            DI.Application.Network.StopReconnecting();
         }
 
         /// <summary>
@@ -465,7 +466,7 @@ namespace Testinator.Client.Core
         /// </summary>
         private void TimesUp()
         {
-            IoCClient.UI.ShowMessage(new MessageBoxDialogViewModel()
+            DI.UI.ShowMessage(new MessageBoxDialogViewModel()
             {
                 Title = "Koniec czasu",
                 Message = "Czas przeznaczony na rozwiązanie testu minął!",
@@ -491,10 +492,10 @@ namespace Testinator.Client.Core
             };
             
             // Send it to the server
-            IoCClient.Application.Network.SendData(data);
+            DI.Application.Network.SendData(data);
 
             // Log it
-            IoCClient.Logger.Log("Sending progress package to the server");
+            DI.Logger.LogDebugSource("Sending progress package to the server");
         }
 
         /// <summary>

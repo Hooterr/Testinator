@@ -63,7 +63,7 @@ namespace Testinator.Server
                 .AddApplicationViewModels()
                 .Build();
 
-            await DI.AppDbContext.Database.EnsureCreatedAsync();
+            await AppDbContext.Database.EnsureCreatedAsync();
         }
 
         private string GetLogFileName()

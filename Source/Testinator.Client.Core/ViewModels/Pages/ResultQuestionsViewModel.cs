@@ -15,7 +15,7 @@ namespace Testinator.Client.Core
         /// <summary>
         /// Viewmodels for the questions
         /// </summary>
-        public List<BaseViewModel> Questions => IoCClient.DI.TestHost.QuestionViewModels;
+        public List<BaseViewModel> Questions => DI.TestHost.QuestionViewModels;
 
         #endregion
 
@@ -84,7 +84,7 @@ namespace Testinator.Client.Core
         /// </summary>
         private void Return()
         {
-            IoCClient.Application.GoToPage(ApplicationPage.ResultOverviewPage);
+            DI.Application.GoToPage(ApplicationPage.ResultOverviewPage);
         }
 
         #endregion

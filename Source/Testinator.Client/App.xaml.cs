@@ -1,8 +1,11 @@
-﻿using System;
+﻿using Dna;
+using System;
 using System.Globalization;
 using System.Windows;
 using Testinator.Client.Core;
 using Testinator.Core;
+
+using static Testinator.Client.Core.DI;
 
 namespace Testinator.Client
 {
@@ -24,14 +27,14 @@ namespace Testinator.Client
             ApplicationSetup();
 
             // Log that application is starting
-            IoCClient.Logger.Log("Application starting...");
+            Logger.LogDebugSource("Application starting...");
 
             // Show the main window
             Current.MainWindow = new MainWindow();
             Current.MainWindow.Show();
 
             // Go to the first page
-            IoCClient.Application.GoToPage(ApplicationPage.Login);
+            DI.Application.GoToPage(ApplicationPage.Login);
         }
 
         /// <summary>
@@ -40,7 +43,7 @@ namespace Testinator.Client
         /// <param name="e"></param>
         protected override void OnExit(ExitEventArgs e)
         {
-            IoCClient.Application.Close();
+            DI.Application.Close();
         }
 
         /// <summary>
@@ -51,25 +54,16 @@ namespace Testinator.Client
             // Set default language
             LocalizationResource.Culture = new CultureInfo("pl-PL");
 
-            // Setup IoC
-            IoCClient.Setup();
+            Framework.Construct<DefaultFrameworkConstruction>()
+                .AddFileLogger()
+                .AddApplicationServices()
+                .AddApplicationViewModels()
+                .Build();
+        }
 
-            // Bind a logger
-            IoCClient.Kernel.Bind<ILogFactory>().ToConstant(new BaseLogFactory(new[]
-            {
-                // TODO: Add ApplicationSettings so we can set/edit a log location
-                //       For now just log to the path where this application is running
-
-                // TODO: Make log files ordered by a date, week-wise
-                //       For now - random numbers for testing as it allows running multiple clients
-                new FileLogger(($"log{new Random().Next(100000, 99999999).ToString()}.txt")),
-            }));
-
-            // Bind a File Writer
-            IoCClient.Kernel.Bind<FileManagerBase>().ToConstant(new LogsWriter());
-
-            // Bind a UI Manager
-            IoCClient.Kernel.Bind<IUIManager>().ToConstant(new UIManager());
+        private string GetDefaultLogFileName()
+        {
+            return $"TestinatorClientLog-{DateTime.Now.ToString().Replace("/", "-").Replace(" ", "-").Replace(":", "-")}.txt";
         }
     }
 }

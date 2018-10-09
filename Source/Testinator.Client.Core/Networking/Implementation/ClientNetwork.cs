@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Dna;
+using System;
 using System.IO;
 using System.Net;
 using Testinator.Core;
@@ -38,8 +39,8 @@ namespace Testinator.Client.Core
         /// </summary>
         public void SendClientModelUpdate()
         {
-            var dataPackage = IoCClient.Client.GetPackage();
-            IoCClient.Application.Network.SendData(dataPackage);
+            var dataPackage = DI.Client.GetPackage();
+            DI.Application.Network.SendData(dataPackage);
         }
 
         /// <summary>
@@ -65,14 +66,14 @@ namespace Testinator.Client.Core
         protected override void OnConnectionLost()
         {
             // Log it
-            IoCClient.Logger.Log("Network connection lost");
+            DI.Logger.LogDebugSource("Network connection lost");
 
             // Dont'try to reconnect if in the result page, because the test result has been already sent to the server
-            if (IoCClient.DI.TestHost.IsShowingResultPage)
+            if (DI.TestHost.IsShowingResultPage)
                 return;
 
             // If the test in progress
-            if (IoCClient.DI.TestHost.IsTestInProgress)
+            if (DI.TestHost.IsTestInProgress)
             {
                 // Notify the test host about the disconnection
                 //IoCClient.DI.TestHost.NetworkDisconnected();
@@ -86,7 +87,7 @@ namespace Testinator.Client.Core
 
             // In any other case return to the login page
             else
-                IoCClient.UI.DispatcherThreadAction(() => IoCClient.Application.GoToPage(ApplicationPage.Login));
+                DI.UI.DispatcherThreadAction(() => DI.Application.GoToPage(ApplicationPage.Login));
         }
 
         /// <summary>
@@ -95,15 +96,15 @@ namespace Testinator.Client.Core
         protected override void OnDisconnected()
         {
             // Log it
-            IoCClient.Logger.Log("Network disconnected");
+            DI.Logger.LogDebugSource("Network disconnected");
 
             // Dont'try to reconnect if in the result page, because the test result has been already sent to the server
-            if (IoCClient.DI.TestHost.IsShowingResultPage)
+            if (DI.TestHost.IsShowingResultPage)
                 return;
 
             // If not in reults page show login page
-            if (!IoCClient.DI.TestHost.IsTestInProgress)
-                IoCClient.UI.DispatcherThreadAction(() => IoCClient.Application.GoToPage(ApplicationPage.Login));
+            if (!DI.TestHost.IsTestInProgress)
+                DI.UI.DispatcherThreadAction(() => DI.Application.GoToPage(ApplicationPage.Login));
         }
 
         /// <summary>
@@ -112,19 +113,19 @@ namespace Testinator.Client.Core
         protected override void OnConnectionEstablished()
         {
             // Log it
-            IoCClient.Logger.Log("Network connected");
+            DI.Logger.LogDebugSource("Network connected");
 
             // Send info package with the information
-            SendData(IoCClient.Client.GetPackage());
-            IoCClient.Logger.Log("Sending client info...");
+            SendData(DI.Client.GetPackage());
+            DI.Logger.LogDebugSource("Sending client info...");
 
             // Reset AttemptingToReconnect flag
             AttemptingToReconnect = false;
 
             // If we're in login page change page to the waiting for test page
-            if (IoCClient.Application.CurrentPage == ApplicationPage.Login)
+            if (DI.Application.CurrentPage == ApplicationPage.Login)
             {
-                IoCClient.UI.DispatcherThreadAction(() => IoCClient.Application.GoToPage(ApplicationPage.WaitingForTest));
+                DI.UI.DispatcherThreadAction(() => DI.Application.GoToPage(ApplicationPage.WaitingForTest));
             }
             //else
                 // Notify the test host
@@ -144,19 +145,19 @@ namespace Testinator.Client.Core
             {
                 case PackageType.TestForm:
                     // Bind the newly received test
-                    IoCClient.DI.TestHost.BindTest(DataReceived.Content as Test);
+                    DI.TestHost.BindTest(DataReceived.Content as Test);
                     break;
 
                 case PackageType.BeginTest:
 
                     var args = DataReceived.Content as TestStartupArgs;
 
-                    IoCClient.DI.TestHost.SetupArguments(args);
-                    IoCClient.DI.TestHost.StartTest();
+                    DI.TestHost.SetupArguments(args);
+                    DI.TestHost.StartTest();
                     break;
 
                 case PackageType.StopTestForcefully:
-                    IoCClient.DI.TestHost.AbortTest();
+                    DI.TestHost.AbortTest();
                     break;
 
             }

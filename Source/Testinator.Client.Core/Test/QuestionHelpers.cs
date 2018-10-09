@@ -21,7 +21,7 @@ namespace Testinator.Client.Core
                         // Get the view model of a question and pass it as a parameter to new site
                         var questionViewModel = new QuestionMultipleChoiceViewModel();
                         questionViewModel.AttachQuestion(questionToShow as MultipleChoiceQuestion);
-                        IoCClient.UI.DispatcherThreadAction(() => IoCClient.Application.GoToPage(ApplicationPage.QuestionMultipleChoice, questionViewModel));
+                        DI.UI.DispatcherThreadAction(() => DI.Application.GoToPage(ApplicationPage.QuestionMultipleChoice, questionViewModel));
                         break;
                     }
 
@@ -30,7 +30,7 @@ namespace Testinator.Client.Core
                         // Get the view model of a question and pass it as a parameter to new site
                         var questionViewModel = new QuestionMultipleCheckboxesViewModel();
                         questionViewModel.AttachQuestion(questionToShow as MultipleCheckBoxesQuestion);
-                        IoCClient.UI.DispatcherThreadAction(() => IoCClient.Application.GoToPage(ApplicationPage.QuestionMultipleCheckboxes, questionViewModel));
+                        DI.UI.DispatcherThreadAction(() => DI.Application.GoToPage(ApplicationPage.QuestionMultipleCheckboxes, questionViewModel));
                         break;
                     }
 
@@ -39,7 +39,7 @@ namespace Testinator.Client.Core
                         // Get the view model of a question and pass it as a parameter to new site
                         var questionViewModel = new QuestionSingleTextBoxViewModel();
                         questionViewModel.AttachQuestion(questionToShow as SingleTextBoxQuestion);
-                        IoCClient.UI.DispatcherThreadAction(() => IoCClient.Application.GoToPage(ApplicationPage.QuestionSingleTextBox, questionViewModel));
+                        DI.UI.DispatcherThreadAction(() => DI.Application.GoToPage(ApplicationPage.QuestionSingleTextBox, questionViewModel));
                         break;
                     }
             }

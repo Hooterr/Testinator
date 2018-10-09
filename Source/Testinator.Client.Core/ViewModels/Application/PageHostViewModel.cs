@@ -1,4 +1,5 @@
-﻿using Testinator.Core;
+﻿using Dna;
+using Testinator.Core;
 
 namespace Testinator.Client.Core
 {
@@ -47,7 +48,7 @@ namespace Testinator.Client.Core
             OnPageChange(page);
 
             // Log it
-            IoCClient.Logger.Log("Changing application page to:" + page.ToString());
+            DI.Logger.LogDebugSource("Changing application page to:" + page.ToString());
 
         }
 

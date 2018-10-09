@@ -24,9 +24,9 @@ namespace Testinator.Server
         public static FrameworkConstruction AddApplicationServices(this FrameworkConstruction construction)
         {
             construction.Services.AddTransient<IUIManager, UIManager>();
-            construction.Services.AddTransient<ServerNetwork>();
-            construction.Services.AddTransient<TestHost>();
-            construction.Services.AddTransient<TestEditor>();
+            construction.Services.AddSingleton<ServerNetwork>();
+            construction.Services.AddSingleton<TestHost>();
+            construction.Services.AddSingleton<TestEditor>();
 
             // Local storage
             construction.Services.AddDbContext<TestinatorAppDbContext>(options =>

@@ -21,7 +21,7 @@ namespace Testinator.Client.Core
         /// The title which shows question id
         /// </summary>
         public string QuestionPageCounter =>
-            IsReadOnly ? "Pytanie " + DisplayIndex + " / " + IoCClient.DI.TestHost.Questions.Count : "Pytanie " + IoCClient.DI.TestHost.CurrentQuestionString;
+            IsReadOnly ? "Pytanie " + DisplayIndex + " / " + DI.TestHost.Questions.Count : "Pytanie " + DI.TestHost.CurrentQuestionString;
 
         /// <summary>
         /// Options for the questions to check or uncheck
@@ -143,10 +143,10 @@ namespace Testinator.Client.Core
                 UserAnswer = checkedList,
             };
 
-            IoCClient.DI.TestHost.SaveAnswer(answer);
+            DI.TestHost.SaveAnswer(answer);
 
             // Go to next question page
-            IoCClient.DI.TestHost.GoNextQuestion();
+            DI.TestHost.GoNextQuestion();
         }
 
         #endregion

@@ -18,17 +18,17 @@ namespace Testinator.Client
         /// <summary>
         /// The application view model
         /// </summary>
-        public static ApplicationViewModel ApplicationViewModel => IoCClient.Application;
+        public static ApplicationViewModel ApplicationViewModel => DI.Application;
 
         /// <summary>
         /// The test host
         /// </summary>
-        public static TestHost TestHost => IoCClient.TestHost;
+        public static TestHost TestHost => DI.TestHost;
 
         /// <summary>
         /// The client (user) model
         /// </summary>
-        public static ClientModel ClientModel => IoCClient.Client;
+        public static ClientModel ClientModel => DI.Client;
 
         #endregion
     }
